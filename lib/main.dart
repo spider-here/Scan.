@@ -5,5 +5,8 @@ import 'package:pdf_scanner/splash.dart';
 void main() {
   runApp(GetMaterialApp(
     home: splash(),
+    theme: ThemeData(
+      primarySwatch: Colors.red,
+    ),
   ));
 }

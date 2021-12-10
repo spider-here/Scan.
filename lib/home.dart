@@ -1,6 +1,12 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
+import 'package:pdf_scanner/search.dart';
+
+import 'documentViewer.dart';
+import 'menu.dart';
 
 class home extends StatelessWidget{
   @override
@@ -8,17 +14,16 @@ class home extends StatelessWidget{
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.document_scanner_rounded, color: Colors.white,),
-        onPressed: (){},
+        onPressed: () {},
         backgroundColor: Colors.red,
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("scan.", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 30.0,),),
+        title: Text("PDF Scanner", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 25.0,),),
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.money_rounded, color: Colors.black87,), splashRadius: 25.0,),
-          IconButton(onPressed: (){}, icon: Icon(Icons.language_rounded, color: Colors.black87,), splashRadius: 25.0,),
-          IconButton(onPressed: (){}, icon: Icon(Icons.search_rounded, color: Colors.black87,), splashRadius: 25.0,),
-          IconButton(onPressed: (){}, icon: Icon(Icons.menu_rounded, color: Colors.black87,), splashRadius: 25.0,),
+          IconButton(onPressed: (){}, icon: Icon(Icons.credit_card_rounded, color: Colors.black87,), splashRadius: 25.0,),
+          IconButton(onPressed: (){Get.to(search(), fullscreenDialog: true,transition: Transition.rightToLeftWithFade,);}, icon: Icon(Icons.search_rounded, color: Colors.black87,), splashRadius: 25.0,),
+          IconButton(onPressed: (){Get.to(menu(), fullscreenDialog: true,transition: Transition.rightToLeftWithFade,);}, icon: Icon(Icons.menu_rounded, color: Colors.black87,), splashRadius: 25.0,),
         ],
       ),
       body: SingleChildScrollView(
@@ -35,7 +40,9 @@ class home extends StatelessWidget{
                       physics: BouncingScrollPhysics(),
                       crossAxisCount: 4,
                       itemCount: 8,
-                      itemBuilder: (BuildContext context, int index) => new Card(
+                      itemBuilder: (BuildContext context, int index) => new InkWell(
+                        onTap: (){Get.to(documentViewer(), fullscreenDialog: true, transition: Transition.downToUp);},
+                    child:Card(
                           color: Colors.white,
                           elevation: 10.0,
                           shape: RoundedRectangleBorder(
@@ -76,6 +83,7 @@ class home extends StatelessWidget{
                             )]
                           ),
                         ),
+                      ),
                       ),
                       staggeredTileBuilder: (int index) =>
                       new StaggeredTile.count(2, index.isEven ? 3 : 4),

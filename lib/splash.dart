@@ -9,7 +9,7 @@ class splash extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedSplashScreen(
-            splash: Text("scan.", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 50.0,)),
+            splash: Text("PDF Scanner", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 40.0,)),
             nextScreen: home(),
         splashTransition: SplashTransition.decoratedBoxTransition,
           ),
