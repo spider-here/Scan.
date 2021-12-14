@@ -32,16 +32,16 @@ class pdfSuccessState extends State{
     });
     try{
       await stoRef.ref("user_id").child("$documentName").putFile(File(pdfPath));
+      setState((){
+        showProgressBar = false;
+        Get.snackbar("Backup","File Uploaded to Cloud", colorText: Colors.white,
+            backgroundColor: Colors.black, snackPosition: SnackPosition.BOTTOM);
+        Get.off(home());
+      });
     }
     catch(e){
-
+      print(e.toString());
     }
-    setState((){
-      showProgressBar = false;
-      Get.snackbar("Backup","File Uploaded to Cloud", colorText: Colors.white,
-          backgroundColor: Colors.black, snackPosition: SnackPosition.BOTTOM);
-      Get.off(home());
-    });
   }
 
 

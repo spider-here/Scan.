@@ -1,13 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pdf_scanner/splash.dart';
 
 class menu extends StatelessWidget{
 
-  List menuIcons = [Icons.insert_photo_rounded, Icons.share_rounded, Icons.star_rate_rounded, Icons.privacy_tip_rounded,];
-  List menuTitles = ["Import from Gallery", "Share this App", "Rate this App", "Privacy Policy",];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  List menuIcons = [Icons.insert_photo_rounded, Icons.credit_card_rounded, Icons.share_rounded, Icons.star_rate_rounded, Icons.privacy_tip_rounded,];
+  List menuTitles = ["Import from Gallery", "Remove Adds", "Share this App", "Rate this App", "Privacy Policy",];
+
+  Future<void> signOutFromGoogle() async{
+    await _googleSignIn.signOut();
+    await _auth.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +71,7 @@ class menu extends StatelessWidget{
                     ));
               },
                 physics: BouncingScrollPhysics(),
-                itemCount: 4,),
+                itemCount: menuTitles.length,),
             ),
             Align(
               alignment: FractionalOffset.bottomCenter,
@@ -82,9 +92,9 @@ class menu extends StatelessWidget{
                       ),
                     ),
                     child: ListTile(
-                      onTap: (){},
-                      leading: Icon(Icons.credit_card_rounded, color: Colors.white),
-                      title: Text("Remove Ads", style: TextStyle(color: Colors.white)),
+                      onTap: (){signOutFromGoogle().whenComplete(() => Get.offAll(()=>splash()));},
+                      leading: Icon(Icons.logout_rounded, color: Colors.white),
+                      title: Text("Logout", style: TextStyle(color: Colors.white)),
                     ),
                   )),
             ),
