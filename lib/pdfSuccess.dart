@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +26,14 @@ class pdfSuccessState extends State{
   pdfSuccessState({required this.pdfPath, required this.documentName});
   FirebaseStorage stoRef = FirebaseStorage.instance;
   bool showProgressBar = false;
+  User? currentUser = FirebaseAuth.instance.currentUser;
 
   addToFireStorage() async {
     setState((){
       showProgressBar = true;
     });
     try{
-      await stoRef.ref("user_id").child("$documentName").putFile(File(pdfPath));
+      await stoRef.ref(currentUser!.email).child("$documentName").putFile(File(pdfPath));
       setState((){
         showProgressBar = false;
         Get.snackbar("Backup","File Uploaded to Cloud", colorText: Colors.white,
