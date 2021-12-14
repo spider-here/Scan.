@@ -1,8 +1,10 @@
 
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:pdf_scanner/scan.dart';
 import 'package:pdf_scanner/search.dart';
 
 import 'documentViewer.dart';
@@ -14,7 +16,7 @@ class home extends StatelessWidget{
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.document_scanner_rounded, color: Colors.white,),
-        onPressed: () {},
+        onPressed: () async {await availableCameras().then((value) => Get.to(scan(cameras: value,), transition: Transition.rightToLeft));},
         backgroundColor: Colors.red,
       ),
       appBar: AppBar(
