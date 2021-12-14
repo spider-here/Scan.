@@ -1,6 +1,5 @@
 
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-import 'home.dart';
+import 'pdfSuccess.dart';
 
 class pdf extends StatefulWidget{
   List<File> scannedFiles;
@@ -26,6 +25,7 @@ class pdfState extends State{
   List<File> scannedFiles = [];
   pdfState({required this.scannedFiles});
   final pdf = pw.Document;
+  String documentName = DateTime.now().toString();
 
   createPdf(pdf) async {
     final pdf = pw.Document();
@@ -44,14 +44,11 @@ class pdfState extends State{
       ));
     }
     final tempDir = await getExternalStorageDirectory();
-    String documentName = DateTime.now().toString();
     String pdfPath = tempDir!.path + "/$documentName" + ".pdf";
     File pdfFile = File(pdfPath);
     print(pdfPath);
     pdfFile.writeAsBytes(await pdf.save()).then((value) {
-      Get.snackbar("PDF Saved", "/storage/emulated/0/Android/data/com.spider.pdf_scanner/files/",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.black, colorText: Colors.white);
-      Get.offAll(()=>home());
+      Get.offAll(()=>pdfSuccess(pdfPath: pdfPath, documentName: documentName), transition: Transition.rightToLeft);
     });
   }
 
