@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'home.dart';
+import '../home/home.dart';
 
 class pdfSuccess extends StatefulWidget{
   String pdfPath;
@@ -24,20 +25,29 @@ class pdfSuccessState extends State{
   String pdfPath;
   String documentName;
   pdfSuccessState({required this.pdfPath, required this.documentName});
-  FirebaseStorage stoRef = FirebaseStorage.instance;
   bool showProgressBar = false;
   User? currentUser = FirebaseAuth.instance.currentUser;
 
   addToFireStorage() async {
+    String downloadUrl = "";
     setState((){
       showProgressBar = true;
     });
+    var stoRef = FirebaseStorage.instance.ref(currentUser!.uid).child("$documentName");
+    var dbref = FirebaseDatabase.instance.reference();
     try{
-      await stoRef.ref(currentUser!.email).child("$documentName").putFile(File(pdfPath));
+      UploadTask uploadTask = stoRef.putFile(File(pdfPath));
+      uploadTask.whenComplete(() async {
+        downloadUrl = await stoRef.getDownloadURL();
+        await dbref.child(currentUser!.uid).push().set(<String, String>{
+          'downloadUrl' : downloadUrl,
+          'title' : documentName + ".pdf",
+        });
+      });
       setState((){
         showProgressBar = false;
         Get.snackbar("Backup","File Uploaded to Cloud", colorText: Colors.white,
-            backgroundColor: Colors.black, snackPosition: SnackPosition.BOTTOM);
+            backgroundColor: Colors.black87, snackPosition: SnackPosition.BOTTOM);
         Get.off(home());
       });
     }
@@ -63,7 +73,7 @@ class pdfSuccessState extends State{
                 Spacer(),
                 Icon(Icons.assignment_turned_in_rounded, color: Colors.red, size: MediaQuery.of(context).size.width/2.2,),
                 Text("PDF Generated Successfully", textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20.0)),
+                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 20.0)),
                 Padding(padding: EdgeInsets.all(10.0)),
                 Text("File Path: $pdfPath", textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey,)),

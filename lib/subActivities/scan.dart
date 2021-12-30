@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:pdf_scanner/pdf.dart';
+import 'package:pdf_scanner/subActivities/pdf.dart';
 
 class scan extends StatefulWidget{
 
@@ -52,9 +52,11 @@ class scanState extends State{
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Crop',
-            toolbarColor: Colors.black,
+            toolbarColor: Colors.black87,
+            backgroundColor: Colors.black87,
             toolbarWidgetColor: Colors.white,
             activeControlsWidgetColor: Colors.red,
+            statusBarColor: Colors.black87,
             // hideBottomControls: true,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
@@ -80,14 +82,14 @@ class scanState extends State{
     }
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.black87,
           iconTheme: IconThemeData(
               color: Colors.white
           ),
           title: Text("Scan", style: TextStyle(color: Colors.white))
         ),
       body: Container(
-        color: Colors.black,
+        color: Colors.black87,
         child: Stack(
           children: [
             Align(
@@ -108,7 +110,7 @@ class scanState extends State{
                     setState((){});
                     if(pictureFile!= null){
                       print("Captured");
-                      _cropImage().then((value) => Get.to(()=>pdf(scannedFiles: croppedFiles,)));
+                      _cropImage().then((value) => Get.to(()=>pdf(scannedFiles: croppedFiles, fromGallery: false,)));
                     }
                   },
                   backgroundColor: Colors.red,
